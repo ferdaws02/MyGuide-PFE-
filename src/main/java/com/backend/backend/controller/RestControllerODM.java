@@ -80,5 +80,7 @@ public class RestControllerODM {
         return new ResponseEntity<>("Erreur lors de l'enregistrement des données", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
+ @PutMapping("/anuuleStatus")
+    public void updatestatus(@RequestBody OrdreMissionDTO odm){odm_Service.statusAnnuler(odm);}
 
 }
