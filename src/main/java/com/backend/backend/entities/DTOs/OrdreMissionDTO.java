@@ -17,6 +17,10 @@ public class OrdreMissionDTO {
     private String Description_odm;
     private int nbr_jour_tt;
     private int nbr_jour_sur_site;
+    private float nbrJRSURsit;
+    private float kmJour;
+    private float fraiskm;
+    private float somme;
     @ManyToOne
     @JoinColumn(name="consultantsOdm",referencedColumnName = "id_c")
     private Consultants consultantsOdm;

@@ -1,7 +1,9 @@
 package com.backend.backend.services;
 
+import com.backend.backend.Repositories.INoteDeFraisRepository;
 import com.backend.backend.Repositories.IOrdreDeMissionRepository;
 import com.backend.backend.entities.Conge;
+import com.backend.backend.entities.NoteDeFrais;
 import com.backend.backend.entities.DTOs.OrdreMissionDTO;
 import com.backend.backend.entities.OrdreDeMission;
 import com.backend.backend.entities.Projet;
@@ -13,11 +15,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
-@Slf4j
+
 @Service
 public class OrdreDEMissionServiceImpl implements IOrderDeMissionService{
     @Autowired
     IOrdreDeMissionRepository ODM_Repo;
+    @Autowired
+    INoteDeFraisRepository NoteDeFraisRepo;
 
 
 
@@ -45,8 +49,22 @@ public class OrdreDEMissionServiceImpl implements IOrderDeMissionService{
             Long id_c = ordre.getConsultantsOdm().getIdc();
 
             ODM_Repo.save(odm);
+//            if (odm.getNbr_jour_tt() == 0) {
+//     // Créez et sauvegardez la note de frais ici
+//     NoteDeFrais noteDeFrais = new NoteDeFrais();
+//     noteDeFrais.setNbrJRSURsit(0); // Définissez la valeur appropriée pour nbrJRSURsit
+//     noteDeFrais.setKmJour(0); // Définissez la valeur appropriée pour kmJour
+//     noteDeFrais.setFraiskm(0); // Définissez la valeur appropriée pour fraiskm
+//     noteDeFrais.setSomme(0); // Définissez la valeur appropriée pour somme
+//     noteDeFrais.setOdm(odm); // Liez la note de frais à l'ordre de mission
+
+//     NoteDeFraisRepo.save(noteDeFrais);
+// }
             return new ResponseEntity(HttpStatus.CREATED);
-        }return new ResponseEntity(HttpStatus.NOT_FOUND);
+        
+        }
+
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     /**
@@ -56,7 +74,7 @@ public class OrdreDEMissionServiceImpl implements IOrderDeMissionService{
     @Override
     public ResponseEntity<String> MettreAJourODM(OrdreMissionDTO odmDTO) {
         OrdreDeMission om = new OrdreDeMission();
-        om.setId_odm(odmDTO.getId_odm());
+        // om.setId_odm(odmDTO.getId_odm());
         om.setNbr_jour_tt(odmDTO.getNbr_jour_tt());
         om.setDescription_odm(odmDTO.getDescription_odm());
         om.setConsultantsOdm(odmDTO.getConsultantsOdm());
@@ -86,5 +104,12 @@ public class OrdreDEMissionServiceImpl implements IOrderDeMissionService{
         Iterable<OrdreDeMission> odm =  ODM_Repo.findAll();
         return new ResponseEntity(odm, HttpStatus.OK);
 
+    }
+
+    @Override
+    public void statusAnnuler(OrdreMissionDTO odm) {
+        OrdreDeMission odmnew =ODM_Repo.findById(odm.getId_odm()).orElse(null);
+    odmnew.setStatusOdm("Annuler");  
+    ODM_Repo.save(odmnew);
     }
 }

@@ -15,5 +15,6 @@ public class ActionServiceImpl implements IActionServices{
     @Override
     public void AjouterAction(Actions action) {
         action_repo.save(action);
+        
     }
 }

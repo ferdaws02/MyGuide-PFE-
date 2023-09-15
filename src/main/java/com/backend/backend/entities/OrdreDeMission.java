@@ -1,6 +1,8 @@
 package com.backend.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +26,7 @@ public class OrdreDeMission implements Serializable {
     private String Description_odm;
     private int nbr_jour_tt;
     private int nbr_jour_sur_site;
+    private String statusOdm; 
     @ManyToOne
     @JoinColumn(name="consultantsOdm",referencedColumnName = "id_c")
     @JsonIgnore
@@ -35,5 +38,8 @@ public class OrdreDeMission implements Serializable {
     private Projet projetOdm;
 
 
-
+    @JsonManagedReference
+    @OneToOne
+    // @JsonIgnore
+     private NoteDeFrais ndf;
 }

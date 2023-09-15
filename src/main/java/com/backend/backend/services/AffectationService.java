@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -17,8 +18,10 @@ public class AffectationService implements IAffectationService {
    @Autowired
     IAffectationRepository aff_repo;
 
-
-
+ public static boolean isDateAfterToday(LocalDate date) {
+        LocalDate today = LocalDate.now();
+        return date.isAfter(today);
+    }
 
     @Override
     public void AjouterAffectationMI(Affectation aff) {
@@ -26,7 +29,14 @@ public class AffectationService implements IAffectationService {
         AffectationId id = new AffectationId();
         id.setConsultant_id(aff.getId().getConsultant_id());
         id.setManager_id(aff.getId().getManager_id());
-        aff_repo.save(aff);
+        if (isDateAfterToday(aff.getAff_date())){
+            aff.setStatus("en cour");
+             aff_repo.save(aff);
+        }else{
+            aff.setStatus("en attente");
+             aff_repo.save(aff);
+        }
+       
     }
     @Override
     public Iterable<Affectation> getALL() {
