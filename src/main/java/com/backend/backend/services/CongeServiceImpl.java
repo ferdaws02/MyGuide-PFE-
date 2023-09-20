@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -56,7 +57,7 @@ public class CongeServiceImpl implements ICongeService {
             if (compareDates(co.getDdconge(), co.getDfconge()) < 0) {
                 Long NBr= calculateDaysBetween(co.getDdconge(),co.getDfconge());
                 if(NBr<22) {
-                    List<TypeConge> Types = Tco_Repo.findALLTypeCongeByType(tco.getType());
+                    List<TypeConge> Types = (List<TypeConge>) Tco_Repo.findALLTypeCongeByType(tco.getType());
                     if (Types.isEmpty()) {
                         return new ResponseEntity(HttpStatus.NOT_FOUND);
                     } else {
@@ -80,7 +81,6 @@ public class CongeServiceImpl implements ICongeService {
         }
     }
 
-
     /**
      * @param coDto
      * @return
@@ -88,6 +88,7 @@ public class CongeServiceImpl implements ICongeService {
     @Override
     public ResponseEntity<String> MettreAJourCo(CongeDTO coDto, String tco) {
         Conge co = new Conge();
+        co.setId_co(coDto.getId_co());
         co.setEtat(coDto.getEtat());
         co.setDfconge(coDto.getDfconge());
         co.setDdconge(coDto.getDdconge());
@@ -143,11 +144,23 @@ public class CongeServiceImpl implements ICongeService {
      * @return
      */
     @Override
-    public Iterable<Conge> getALL() {
-       List<Conge>Conges= (List<Conge>) co_Repo.findAll();
-        return  Conges;
+    public List<CongeDTO> getALL() {
+        List<Conge> conges = (List<Conge>) co_Repo.findAll();
+        return conges.stream()
+            .map(this::mapToCongeDTO)
+            .collect(Collectors.toList());
     }
-
+    
+    private CongeDTO mapToCongeDTO(Conge conge) {
+        CongeDTO dto = new CongeDTO();
+        dto.setId_co(conge.getId_co());
+        dto.setDdconge(conge.getDdconge());
+        dto.setDfconge(conge.getDfconge());
+        dto.setEtat(conge.getEtat());
+        dto.setConsultant(conge.getConsultant());
+        dto.setTypeConge(conge.getTypeConge());
+        return dto;
+    }
     /**
      * @param consultantId
      * @return

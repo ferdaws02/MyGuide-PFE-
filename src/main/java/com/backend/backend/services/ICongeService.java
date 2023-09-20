@@ -14,7 +14,7 @@ public interface ICongeService {
     public ResponseEntity<String> AjoutConge(CongeDTO co, TypeConge Tco,Consultants con);
     public ResponseEntity<String> MettreAJourCo(CongeDTO coDto, String Tco);
     public ResponseEntity<String> MettreAJourStatusCo(Long id, EtatConge Eco);
-   Iterable<Conge> getALL();
+   Iterable<CongeDTO> getALL();
     public List<Conge> getCongesByConsultantId(Long consultantId);
     public Long SoldeDeCongeRestant(Long Con_id);
 

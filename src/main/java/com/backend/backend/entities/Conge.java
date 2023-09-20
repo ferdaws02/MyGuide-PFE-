@@ -31,7 +31,7 @@ public class Conge implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="congeconsultant")
-    @JsonIgnore
+     @JsonIgnore
     private Consultants consultant;
     @ManyToOne
     @JoinColumn(name="type_conge")

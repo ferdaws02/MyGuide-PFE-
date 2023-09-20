@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ITypeCongeReposiory extends CrudRepository<TypeConge,Long> {
     List<TypeConge>findALLTypeCongeByType(String Type);
-    TypeConge findTypeCongeByType(String type);
+    List<TypeConge>findTypeCongeByType(String Type);
 }

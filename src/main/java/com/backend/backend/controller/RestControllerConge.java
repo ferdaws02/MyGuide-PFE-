@@ -29,22 +29,11 @@ public class RestControllerConge {
      @Autowired
     ITypeCongeReposiory Tco_Repo;
    @PostMapping("/AddConge")
-public ResponseEntity<String> AddCo(HttpSession session, @RequestBody CongeDTO co) {
-    Consultants profileData = new Consultants();
+   public ResponseEntity<String> AddCo(HttpSession session,@RequestBody CongeDTO co ){
+    Consultants profileData= (Consultants) co_Repo.findById(co.getConsultant().getIdc()).orElse(null);
     profileData.setIdc((Long) session.getAttribute("user_id"));
-
-    // Fetch the TypeConge object based on the string value co.getTypeConge().getType()
-    String typeCongeString = co.getTypeConge().getType();
-    TypeConge typeConge = Tco_Repo.findTypeCongeByType(typeCongeString);
-
-    // Check if the TypeConge exists and then call AjoutConge with the TypeConge object
-    if (typeConge != null) {
-        return co_Ser.AjoutConge(co, typeConge, profileData);
-    } else {
-        // Handle the case where the TypeConge does not exist
-        return ResponseEntity.status(HttpStatus.SC_NOT_FOUND).body("TypeConge not found");
-    }
-}
+    System.out.println("+++++++++++++++++++the id"+session.getAttribute("user-id"));
+    return co_Ser.AjoutConge(co,co.getTypeConge(),profileData);}
 
     @PutMapping("/updateConge")
     public ResponseEntity<String> updateCo(@RequestBody CongeDTO co ){return co_Ser.MettreAJourCo(co,co.getTypeConge().getType());}
@@ -60,7 +49,7 @@ public ResponseEntity<String> AddCo(HttpSession session, @RequestBody CongeDTO c
     }
 
     @GetMapping("/showAll")
-    Iterable<Conge> listerConges(){return co_Ser.getALL();}
+    Iterable<CongeDTO> listerConges(){return co_Ser.getALL();}
     @GetMapping("/{consultantId}")
     public List<Conge> getCongesByConsultantId(@PathVariable("consultantId") Long consultantId) {
         return co_Ser.getCongesByConsultantId(consultantId);

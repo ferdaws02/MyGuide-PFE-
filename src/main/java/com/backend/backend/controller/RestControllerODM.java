@@ -54,14 +54,14 @@ public class RestControllerODM {
         Period periode = Period.between(ordreDeMission.getDebutodm(), ordreDeMission.getFinodm());
 
         // Vérifier si nbr_jour_tt est valide pour générer une note de frais
-        if (ordreMissionDTO.getNbr_jour_sur_site() >= 0 && ordreMissionDTO.getNbr_jour_sur_site() < periode.getDays()) {
+        if (ordreMissionDTO.getNbr_jour_sur_site() > 0 && ordreMissionDTO.getNbr_jour_sur_site() <= periode.getDays()) {
             // Créer une nouvelle note de frais
             NoteDeFrais noteDeFrais = new NoteDeFrais();
             noteDeFrais.setNbrJRSURsit(ordreMissionDTO.getNbr_jour_sur_site());
             noteDeFrais.setKmJour(ordreMissionDTO.getKmJour());
             noteDeFrais.setFraiskm(ordreMissionDTO.getFraiskm());
             float somme= ordreMissionDTO.getKmJour()*ordreMissionDTO.getNbr_jour_sur_site()*ordreMissionDTO.getFraiskm();
-             noteDeFrais.setStatusNdf("En cour de validation SM");
+             noteDeFrais.setStatusNdf("validation_SM");
             noteDeFrais.setSomme(somme);
 
             // Associez la note de frais à l'ordre de mission
