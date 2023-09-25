@@ -25,9 +25,7 @@ public class Consultants extends Comptes  {
     private LocalDate dfaff_projet;
     private  float soldecongémaladie;
     private  float SoldeCongéPayé;
-    @OneToMany(mappedBy = "consultant",cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Formation> formation=new ArrayList<>();
+  
     @OneToMany(mappedBy = "consultant_demande",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Demandes> demandes=new ArrayList<>();

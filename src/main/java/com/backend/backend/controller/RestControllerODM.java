@@ -5,11 +5,15 @@ import com.backend.backend.Repositories.INoteDeFraisRepository;
 import com.backend.backend.Repositories.IOrdreDeMissionRepository;
 import com.backend.backend.entities.Consultants;
 import com.backend.backend.entities.NoteDeFrais;
+import com.backend.backend.entities.DTOs.CongeDTO;
 import com.backend.backend.entities.DTOs.OrdreMissionDTO;
 import com.backend.backend.entities.OrdreDeMission;
+import com.backend.backend.services.INoteDeFraisService;
 import com.backend.backend.services.IOrderDeMissionService;
 
 import java.time.Period;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,13 +31,18 @@ public class RestControllerODM {
     private INoteDeFraisRepository noteDeFraisRepository;
       @Autowired
     private IConsultantRepository co_repo;
+    @Autowired
+    private INoteDeFraisService ndf_service;
 
     @PostMapping("/ajoutODM")
     public ResponseEntity<String>addODM(@RequestBody OrdreMissionDTO odm){return odm_Service.AjoutOdm(odm);}
     @PutMapping("/MAJODM")
     public ResponseEntity<String>updateODM(@RequestBody OrdreMissionDTO odm){return odm_Service.MettreAJourODM(odm);}
     @GetMapping("/showODM")
-    public ResponseEntity<Iterable<OrdreDeMission>>showODM(){return odm_Service.getAllODM();}
+    public ResponseEntity<List<OrdreMissionDTO>> getAllOrdreMissions() {
+        List<OrdreMissionDTO> ordreMissions = odm_Service.getAllODM(); // Implement this service method
+        return ResponseEntity.ok(ordreMissions);
+    }
  @PostMapping("/ajouter")
     public ResponseEntity<String> ajouterOrdreMissionAvecNoteDeFrais(@RequestBody OrdreMissionDTO ordreMissionDTO) {
     try {
@@ -82,5 +91,22 @@ public class RestControllerODM {
 }
  @PutMapping("/anuuleStatus")
     public void updatestatus(@RequestBody OrdreMissionDTO odm){odm_Service.statusAnnuler(odm);}
-
+     @GetMapping("/showNDF")
+    public ResponseEntity<Iterable<NoteDeFrais>>showNDF(){return ndf_service.getAllNDF();}
+    
+    @PutMapping("/update/{id_odm}")
+    public ResponseEntity<String> updateStatusCo(@PathVariable Long id_odm, @RequestBody Map<String, String> requestBody) {
+        // Extract the "etat" field from the JSON object
+        String etat = requestBody.get("etat");
+    
+        return odm_Service.MAJStatusNDFetODM(id_odm, etat);
+    }
+    @PutMapping("NDF/update/{id_ndf}")
+    public ResponseEntity<String> updateStatusNDF(@PathVariable Long id_ndf, @RequestBody Map<String, String> requestBody) {
+        // Extract the "etat" field from the JSON object
+        String etat = requestBody.get("etat");
+    
+        return ndf_service.MAJStatusNDF(id_ndf, etat);
+    }
+    
 }

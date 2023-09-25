@@ -6,7 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.backend.backend.Repositories.INoteDeFraisRepository;
+import com.backend.backend.entities.Conge;
+import com.backend.backend.entities.EtatConge;
 import com.backend.backend.entities.NoteDeFrais;
+import com.backend.backend.entities.OrdreDeMission;
+
+import jakarta.transaction.Transactional;
+
 
 
 
@@ -19,5 +25,22 @@ public class NoteDeFraisServiceImpl implements INoteDeFraisService{
         ndf_Repository.save(ndf);
         return new ResponseEntity(HttpStatus.CREATED);
     }
+    @Override
+    public ResponseEntity<Iterable<NoteDeFrais>> getAllNDF() {
+          Iterable<NoteDeFrais> ndf =   ndf_Repository.findAll();
+        return new ResponseEntity(ndf, HttpStatus.OK);
+    }
+    @Transactional
+    @Override
+    public ResponseEntity<String> MAJStatusNDF(Long id_ndf, String newEtat) {    
+            NoteDeFrais ndf = ndf_Repository.findById(id_ndf).orElse(null);
+      
+
+    ndf.setStatusNdf("Valider");
+        ndf_Repository.save(ndf);
+       return new ResponseEntity<>(HttpStatus.OK);
+        }
     
+    
+
 }

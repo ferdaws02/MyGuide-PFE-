@@ -15,6 +15,7 @@ public class OrdreMissionDTO {
     private LocalDate debutodm;
     private LocalDate finodm;
     private String Description_odm;
+    private String StatusODM;
     private int nbr_jour_tt;
     private int nbr_jour_sur_site;
     private float nbrJRSURsit;

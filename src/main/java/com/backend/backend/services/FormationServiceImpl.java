@@ -4,6 +4,9 @@ import com.backend.backend.Repositories.IFormationRepository;
 import com.backend.backend.entities.Formation;
 
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,12 @@ public class FormationServiceImpl implements IFormationService {
         Formation formation=forma_repo.findById(idf).orElse(null);
         formation.setEtat(etat);
         forma_repo.save(formation);
+    }
+
+    @Override
+    public List<Formation> showFormation() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'showFormation'");
     }
 
 

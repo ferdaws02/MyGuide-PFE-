@@ -13,27 +13,20 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Formation implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_f;
+public class Formation extends Demandes implements Serializable {
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // private Long id_f;
     private String nom_formation;
     @Enumerated(EnumType.STRING)
     private Niveau niveau;
 
     private String commentaire;
     private String etat;
-    @ManyToOne
-    @JoinColumn(name = "consultant")
-    @JsonProperty
-    private Consultants consultant;
+ 
 
     @OneToOne(mappedBy = "formation")
     private Planning planning;
 }
-//    @ManyToOne
-//    @JoinColumn(name = "rh")
-//    @JsonProperty
-//    private RH rh;
-//
+
 

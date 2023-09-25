@@ -3,8 +3,12 @@ package com.backend.backend.services;
 import com.backend.backend.Repositories.INoteDeFraisRepository;
 import com.backend.backend.Repositories.IOrdreDeMissionRepository;
 import com.backend.backend.entities.Conge;
+import com.backend.backend.entities.EtatConge;
 import com.backend.backend.entities.NoteDeFrais;
 import com.backend.backend.entities.DTOs.OrdreMissionDTO;
+
+import jakarta.transaction.Transactional;
+
 import com.backend.backend.entities.OrdreDeMission;
 import com.backend.backend.entities.Projet;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -100,16 +107,56 @@ public class OrdreDEMissionServiceImpl implements IOrderDeMissionService{
      * @return
      */
     @Override
-    public ResponseEntity<Iterable<OrdreDeMission>> getAllODM() {
-        Iterable<OrdreDeMission> odm =  ODM_Repo.findAll();
-        return new ResponseEntity(odm, HttpStatus.OK);
-
+    public List<OrdreMissionDTO> getAllODM() {
+        List<OrdreDeMission> ordreMissions = (List<OrdreDeMission>) ODM_Repo.findAll();
+     
+        List<OrdreMissionDTO> ordreMissionDTOs = new ArrayList<>();
+        for (OrdreDeMission ordreDEMission : ordreMissions) {
+            OrdreMissionDTO dto = new OrdreMissionDTO();
+            dto.setId_odm(ordreDEMission.getId_odm());
+            dto.setDebutodm(ordreDEMission.getDebutodm());
+            dto.setFinodm(ordreDEMission.getFinodm());
+            dto.setDescription_odm(ordreDEMission.getDescription_odm());
+            dto.setStatusODM(ordreDEMission.getStatusOdm());
+            if (ordreDEMission.getNdf()== null){  dto.setSomme(0);}
+            else{
+                dto.setSomme(ordreDEMission.getNdf().getSomme());
+            }
+          
+            ordreMissionDTOs.add(dto);
+        }
+        return ordreMissionDTOs;
     }
-
     @Override
     public void statusAnnuler(OrdreMissionDTO odm) {
         OrdreDeMission odmnew =ODM_Repo.findById(odm.getId_odm()).orElse(null);
     odmnew.setStatusOdm("Annuler");  
-    ODM_Repo.save(odmnew);
+    NoteDeFrais ndf=odmnew.getNdf();
+    if(ndf!= null){
+        ndf.setStatusNdf("Annuler");
+        NoteDeFraisRepo.save(ndf);
+        ODM_Repo.save(odmnew );
+    }else{  ODM_Repo.save(odmnew );}
+ 
+    }
+
+    @Transactional
+    @Override
+    public ResponseEntity<String> MAJStatusNDFetODM(Long id_odm, String newEtat) {
+        OrdreDeMission odm = ODM_Repo.findById(id_odm).orElse(null);
+      
+        odm.setStatusOdm(newEtat);
+        ODM_Repo.save(odm);
+        
+     NoteDeFrais ndf=odm.getNdf();
+    if(ndf!= null){
+       ndf.setStatusNdf(newEtat);
+        NoteDeFraisRepo.save(ndf);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }else{
+        odm.setStatusOdm("Valider");
+        ODM_Repo.save(odm);
+       return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }
