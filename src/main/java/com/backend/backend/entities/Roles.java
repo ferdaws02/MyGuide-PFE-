@@ -13,5 +13,4 @@ public enum Roles {
     Comptable,
     Consultant;
 
-
 }
