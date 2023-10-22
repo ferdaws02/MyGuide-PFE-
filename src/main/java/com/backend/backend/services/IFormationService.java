@@ -12,5 +12,5 @@ public interface IFormationService {
 
 
     void updateFormation(Long idf,String etat);
-    public List<Formation>   showFormation();
+    public List<Formation>showFormation();
 }

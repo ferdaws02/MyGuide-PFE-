@@ -30,6 +30,8 @@ public class Demandes{
     private Date date_demande;
     private String commentaire;
     private String Status;
+    @Enumerated(EnumType.STRING)
+    private TypeDemande typedemande;
     @ManyToOne
     @JoinColumn(name = "Rh_demande")
     @JsonProperty

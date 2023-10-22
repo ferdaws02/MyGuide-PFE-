@@ -17,6 +17,8 @@ public class FormationServiceImpl implements IFormationService {
     IFormationRepository forma_repo;
     @Override
     public void AjouterFormation(Formation formation) {
+        formation.setStatus("En_cours");
+         formation.setEtat("En_cours");
         forma_repo.save(formation);
     }
 
@@ -29,8 +31,8 @@ public class FormationServiceImpl implements IFormationService {
 
     @Override
     public List<Formation> showFormation() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'showFormation'");
+     List<Formation> formations=(List<Formation>) forma_repo.findAll();
+     return formations;
     }
 
 

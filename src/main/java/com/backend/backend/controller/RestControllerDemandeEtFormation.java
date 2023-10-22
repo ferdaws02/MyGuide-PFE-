@@ -5,6 +5,9 @@ import com.backend.backend.services.IDemandeService;
 import com.backend.backend.services.IFormationService;
 import com.backend.backend.services.IPapierService;
 import com.backend.backend.services.IPlanningServices;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +25,13 @@ public class RestControllerDemandeEtFormation {
     @PostMapping("/ajouter_Formation")
     public void ajouterFormation(@RequestBody Formation formation){
         formaservice.AjouterFormation(formation);
+        demande_service.AjouterDemande(formation);
     }
     @PostMapping("/ajouter_Demande")
     public void ajouterDemande(@RequestBody Demandes demande){
         demande_service.AjouterDemande(demande);
+      
+        
     }
     @PostMapping("/ajouter_Papier")
     public void ajouterPapier(@RequestBody Papierdemande papier){pap_serv.AjouterPapier(papier);
@@ -41,6 +47,16 @@ public class RestControllerDemandeEtFormation {
     @PutMapping("/change_etat_demande/{idd}")
     public void ChangeStatusDemande(@PathVariable Long idd,@RequestBody String etat){
         demande_service.updateDemande(idd,etat);
+    }
+    @GetMapping("/showFormation")
+    public List<Formation>showFormation(){
+        return formaservice.showFormation();
+        
+    }
+    @GetMapping("/showDemande")
+    public List<Demandes>showDemande(){
+        return demande_service.showDemande();
+        
     }
 
 }

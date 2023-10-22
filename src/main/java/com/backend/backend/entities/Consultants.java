@@ -12,7 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "Consultants")
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class Consultants extends Comptes  {
 
 
@@ -44,8 +45,8 @@ public class Consultants extends Comptes  {
     private List<Conge> conges=new ArrayList<>();
     @OneToMany(mappedBy = "consultantsOdm",cascade = CascadeType.ALL)
     private List<OrdreDeMission> odms=new ArrayList<>();
+     @OneToMany(mappedBy = "consultantsRec",cascade = CascadeType.ALL)
+    private List<Reclamation> rec=new ArrayList<>();
 
-    public Consultants() {
-        super();
-    }
+
 }
